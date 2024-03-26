@@ -1,9 +1,13 @@
-#include <iostream>
+#include "recursive_alg/ConvexHull.h"
 
-using namespace std;
+int main() {
+    Point a[] = {{2, 8}, {1, 1}, {9, 90}, {4, 4},
+                 {0, 0}, {1, 2}, {3, 1}, {3, 3}, {7, 12}};
+    int n = sizeof(a) / sizeof(a[0]);
 
-int main(){
-    cout << "first commit";
+    ConvexHull convexHull;
+    convexHull.printHull(a, n);
 
     return 0;
 }
+
