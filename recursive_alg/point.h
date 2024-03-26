@@ -12,6 +12,7 @@ public:
     int getX() const;
     int getY() const;
     friend ostream& operator<<(ostream& os, const Point& point);
+    bool operator==(const Point& other) const;
 };
 
 #endif //LAB03_OOP_POINT_H
