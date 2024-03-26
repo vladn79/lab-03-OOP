@@ -1,4 +1,5 @@
 #include "ConvexHull.h"
+using namespace std;
 
 ConvexHull::ConvexHull() {}
 
@@ -40,8 +41,28 @@ void ConvexHull::quickHull(Point a[], int n, const Point& p1, const Point& p2, i
     quickHull(a, n, a[ind], p2, -findSide(a[ind], p2, p1));
 }
 
-int main(){
-    std::cout << "s"; // testing if everything right connected to CMakeLists
+void ConvexHull::printHull(Point a[], int n) {
+    if (n < 3) {
+        cout << "Convex hull not possible" << endl;
+        return;
+    }
+
+    int min_x = 0, max_x = 0;
+    for (int i = 1; i < n; i++) {
+        if (a[i].getX() < a[min_x].getX())
+            min_x = i;
+        if (a[i].getX() > a[max_x].getX())
+            max_x = i;
+    }
+
+    quickHull(a, n, a[min_x], a[max_x], 1);
+    quickHull(a, n, a[min_x], a[max_x], -1);
+
+    cout << "The points in Convex Hull are:"<< endl;
+    for (const auto& point : hull) {
+        cout << point << " ";
+    }
+    cout << endl;
 }
 
 
