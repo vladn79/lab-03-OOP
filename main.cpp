@@ -1,5 +1,5 @@
 #include "recursive_alg/ConvexHull.h"
-
+#include "graham_alg/convexhull_graham.h"
 int main() {
     Point a[] = {{2, 8}, {1, 1}, {9, 90}, {4, 4},
                  {0, 0}, {1, 2}, {3, 1}, {3, 3}, {7, 12}};
@@ -8,6 +8,10 @@ int main() {
     ConvexHull convexHull;
     convexHull.printHull(a, n);
 
+    Point_for_graham points[] = {{2, 8}, {1, 1}, {9, 90}, {4, 4},
+                                 {0, 0}, {1, 2}, {3, 1}, {3, 3}, {7, 12}};
+    ConvexHullGraham hull;
+    hull.convexHull(points, n);
+
     return 0;
 }
-
