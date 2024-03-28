@@ -3,8 +3,10 @@
 
 class Point_for_Jarvis {
 public:
-    int x, y;
     Point_for_Jarvis(int x = 0, int y = 0) : x(x), y(y) {}
+
+    int x;
+    int y;
 };
 
 
