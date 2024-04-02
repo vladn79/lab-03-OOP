@@ -53,4 +53,5 @@ vector<Point_for_kir> ConvexHullKirkpatrick::printHull(Point_for_kir points[], i
         cout << "(" << p.x << ", " << p.y << ")\n";
 
     return hull;
+
 }
