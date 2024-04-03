@@ -166,6 +166,7 @@ bool findCircleCenter(const Point_Fortunes &p1, const Point_Fortunes &p2, const 
         return false;
     }
     Point_Fortunes pc1 = 0.5 * (p1 + p2), pc2 = 0.5 * (p2 + p3);
+
     double b1 = dotProduct(u1, pc1), b2 = dotProduct(u2, pc2);
     center.x = (b1 * u2.y - b2 * u1.y) / cross;
     center.y = (u1.x * b2 - u2.x * b1) / cross;

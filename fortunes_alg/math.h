@@ -67,6 +67,7 @@ public:
 };
 
 double dotProduct(const Point_Fortunes &p1, const Point_Fortunes &p2);
+
 double crossProduct(const Point_Fortunes &p1, const Point_Fortunes &p2);
 
 bool equal(const Point_Fortunes &p1, const Point_Fortunes &p2, double EPSILON = POINT_EPSILON);
