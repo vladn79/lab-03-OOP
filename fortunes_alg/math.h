@@ -5,6 +5,9 @@
 
 #define POINT_EPSILON 1.0e-6
 
+#define CIRCLE_CENTER_EPSILON 1.0e-7
+
+
 class Point_Fortunes {
 
     struct Point_Fortunes_XY_Compare {
@@ -68,3 +71,5 @@ double crossProduct(const Point_Fortunes &p1, const Point_Fortunes &p2);
 
 bool equal(const Point_Fortunes &p1, const Point_Fortunes &p2, double EPSILON = POINT_EPSILON);
 bool equal(double v1, double v2, double EPSILON = POINT_EPSILON);
+
+bool findCircleCenter(const Point_Fortunes &p1, const Point_Fortunes &p2, const Point_Fortunes &p3, Point_Fortunes &center);
