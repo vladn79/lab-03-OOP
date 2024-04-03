@@ -183,8 +183,8 @@ int intersectionPointsNum(const Point_Fortunes &f1, const Point_Fortunes &f2, do
     return 2;
 }
 
-std::vector<Point_Fortunes> findIntersectionPoints(const Point_Fortunes &f1, const Point_Fortunes &f2, double d) {
-    std::vector<Point_Fortunes> result;
+vector<Point_Fortunes> findIntersectionPoints(const Point_Fortunes &f1, const Point_Fortunes &f2, double d) {
+    vector<Point_Fortunes> result;
     if (fabs(f1.x - f2.x) < POINT_EPSILON) {
         double y = 0.5 * (f1.y + f2.y), D = sqrt(d * d - d * (f1.y + f2.y) + f1.y * f2.y);
         result.push_back(Point_Fortunes(f1.x - D, y));

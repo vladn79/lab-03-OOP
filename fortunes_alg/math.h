@@ -7,6 +7,7 @@
 
 #define CIRCLE_CENTER_EPSILON 1.0e-7
 
+using namespace std;
 
 class Point_Fortunes {
 
@@ -76,6 +77,6 @@ bool equal(double v1, double v2, double EPSILON = POINT_EPSILON);
 bool findCircleCenter(const Point_Fortunes &p1, const Point_Fortunes &p2, const Point_Fortunes &p3, Point_Fortunes &center);
 
 int intersectionPointsNum(const Point_Fortunes &f1, const Point_Fortunes &f2, double directrix);
-std::vector<Point_Fortunes> findIntersectionPoints(const Point_Fortunes &f1, const Point_Fortunes &f2, double directrix);
+vector<Point_Fortunes> findIntersectionPoints(const Point_Fortunes &f1, const Point_Fortunes &f2, double directrix);
 
 
