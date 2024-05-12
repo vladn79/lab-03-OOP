@@ -10,23 +10,20 @@ Point_for_graham ConvexHullGraham::nextToTop(std::stack<Point_for_graham> &S) {
     return res;
 }
 
-int ConvexHullGraham::distSq( Point_for_graham p1, Point_for_graham  p2) {
-    return (p1.x - p2.x) * (p1.x - p2.x) +
-           (p1.y - p2.y) * (p1.y - p2.y);
+int ConvexHullGraham::distSq(Point_for_graham p1, Point_for_graham p2) {
+    return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
 }
 
-int ConvexHullGraham::orientation(Point_for_graham  p, Point_for_graham  q, Point_for_graham  r) {
-    int val = (q.y - p.y) * (r.x - q.x) -
-              (q.x - p.x) * (r.y - q.y);
-
+int ConvexHullGraham::orientation(Point_for_graham p, Point_for_graham q, Point_for_graham r) {
+    int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
     if (val == 0)
         return 0; // collinear
     return (val > 0) ? 1 : 2; // clock or counterclockwise
 }
 
 int ConvexHullGraham::compare(const void *vp1, const void *vp2) {
-    Point_for_graham  *p1 = (Point_for_graham  *)vp1;
-    Point_for_graham  *p2 = (Point_for_graham  *)vp2;
+    Point_for_graham *p1 = (Point_for_graham *) vp1;
+    Point_for_graham *p2 = (Point_for_graham *) vp2;
 
     int o = orientation(p0, *p1, *p2);
     if (o == 0)
@@ -35,7 +32,7 @@ int ConvexHullGraham::compare(const void *vp1, const void *vp2) {
     return (o == 2) ? -1 : 1;
 }
 
-void ConvexHullGraham::convexHull(Point_for_graham  points[], int n) {
+void ConvexHullGraham::convexHull(Point_for_graham points[], int n) {
     int ymin = points[0].y, min = 0;
     for (int i = 1; i < n; i++) {
         int y = points[i].y;
@@ -45,7 +42,7 @@ void ConvexHullGraham::convexHull(Point_for_graham  points[], int n) {
 
     std::swap(points[0], points[min]);
     p0 = points[0];
-    qsort(&points[1], n - 1, sizeof(Point_for_graham ), compare);
+    qsort(&points[1], n - 1, sizeof(Point_for_graham), compare);
 
     int m = 1;
     for (int i = 1; i < n; i++) {
@@ -58,7 +55,7 @@ void ConvexHullGraham::convexHull(Point_for_graham  points[], int n) {
     if (m < 3)
         return;
 
-    std::stack<Point_for_graham > S;
+    std::stack<Point_for_graham> S;
     S.push(points[0]);
     S.push(points[1]);
     S.push(points[2]);
@@ -70,8 +67,68 @@ void ConvexHullGraham::convexHull(Point_for_graham  points[], int n) {
     }
 
     while (!S.empty()) {
-        Point_for_graham  p = S.top();
+        Point_for_graham p = S.top();
         std::cout << "(" << p.x << ", " << p.y << ")" << std::endl;
         S.pop();
     }
 }
+
+void ConvexHullGraham::visualizeConvexHull(Point_for_graham points[], int n) {
+    std::stack<Point_for_graham> hullStack;
+
+    int lowestY = 0;
+    for (int i = 1; i < n; ++i) {
+        if (points[i].y < points[lowestY].y || (points[i].y == points[lowestY].y && points[i].x < points[lowestY].x)) {
+            lowestY = i;
+        }
+    }
+
+    std::sort(points, points + n, [&](const Point_for_graham& a, const Point_for_graham& b) {
+        int orientation = this->orientation(points[lowestY], a, b);
+        if (orientation == 0) {
+            return this->distSq(points[lowestY], b) >= this->distSq(points[lowestY], a);
+        }
+        return orientation == 2;
+    });
+
+    hullStack.push(points[0]);
+    hullStack.push(points[1]);
+
+    for (int i = 2; i < n; ++i) {
+        while (hullStack.size() > 1 && this->orientation(nextToTop(hullStack), hullStack.top(), points[i]) != 2) {
+            hullStack.pop();
+        }
+        hullStack.push(points[i]);
+    }
+
+
+    sf::RenderWindow window(sf::VideoMode(800, 800), "Convex Hull");
+
+    sf::CircleShape shape(2.f);
+    shape.setFillColor(sf::Color::Red);
+    for (int i = 0; i < n; ++i) {
+        shape.setPosition(points[i].x, points[i].y);
+        window.draw(shape);
+    }
+    sf::VertexArray lines(sf::LinesStrip);
+    while (!hullStack.empty()) {
+        Point_for_graham p = hullStack.top();
+        lines.append(sf::Vertex(sf::Vector2f(p.x, p.y), sf::Color::Blue));
+        hullStack.pop();
+    }
+    sf::Vector2f firstPointCoords = lines[0].position;
+    Point_for_graham firstPoint(firstPointCoords.x, firstPointCoords.y);
+    lines.append(sf::Vertex(sf::Vector2f(firstPoint.x, firstPoint.y), sf::Color::Blue));
+
+    window.draw(lines);
+    window.display();
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+    }
+}
+

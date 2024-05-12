@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stack>
+#include <SFML/Graphics.hpp>
 #include "point_for_graham.h"
 
 class ConvexHullGraham {
@@ -16,6 +17,7 @@ private:
 
 public:
     void convexHull(Point_for_graham points[], int n);
+    void visualizeConvexHull(Point_for_graham points[], int n);
 };
 
 #endif //LAB03_OOP_CONVEXHULL_GRAHAM_H
