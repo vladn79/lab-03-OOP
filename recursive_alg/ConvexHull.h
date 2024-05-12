@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "Point.h"
-
+#include <SFML/Graphics.hpp>
 using namespace std;
 
 class ConvexHull {
@@ -15,6 +15,8 @@ private:
 
 public:
     ConvexHull();
+    void drawPointsAndLines(sf::RenderWindow& window, const std::vector<Point>& points);
+
     void printHull(Point a[], int n);
 };
 
