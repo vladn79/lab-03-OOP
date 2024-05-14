@@ -55,3 +55,44 @@ vector<Point_for_kir> ConvexHullKirkpatrick::printHull(Point_for_kir points[], i
     return hull;
 
 }
+
+void ConvexHullKirkpatrick::visualizeConvexHullKirkpatrick(Point_for_kir points[], int n) {
+    ConvexHullKirkpatrick convex;
+    std::vector<Point_for_kir> hull = convex.convexHull(points, n);
+
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Convex Hull (Kir)");
+    window.setFramerateLimit(60);
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear(sf::Color::White);
+
+
+        sf::CircleShape pointShape(2.f);
+        pointShape.setFillColor(sf::Color::Black);
+        for (int i = 0; i < n; ++i) {
+            pointShape.setPosition(points[i].x, points[i].y);
+            window.draw(pointShape);
+        }
+
+
+        if (hull.size() > 1) {
+            sf::VertexArray lines(sf::LinesStrip);
+            for (const auto& point : hull) {
+                sf::Vertex vertex(sf::Vector2f(point.x, point.y), sf::Color::Blue);
+                lines.append(vertex);
+            }
+
+            sf::Vertex closingLine(sf::Vector2f(hull[0].x, hull[0].y), sf::Color::Blue);
+            lines.append(closingLine);
+            window.draw(lines);
+        }
+
+        window.display();
+    }
+}
