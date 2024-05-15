@@ -36,7 +36,7 @@ void ConvexHullJarvis::visualizeConvexHullJarvis(Point_for_Jarvis points[], int 
     ConvexHullJarvis convexHullJarvis;
     std::vector<Point_for_Jarvis> hull = convexHullJarvis.convexHull(points, n);
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Convex Hull (Jarvis)");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "Convex Hull (Jarvis)");
     window.setFramerateLimit(60);
 
     while (window.isOpen()) {

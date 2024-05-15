@@ -1,11 +1,15 @@
-#pragma once
+#ifndef LAB03_OOP_DATA_STRUCTURES_H
+#define LAB03_OOP_DATA_STRUCTURES_H
 
+#pragma once
 #include <array>
 #include <limits>
 #include <vector>
 #include <list>
 #include "math.h"
 
+
+class Vector;
 class Field
 {
 public:
@@ -199,3 +203,5 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& os, const Beachline& beachline);
+
+#endif //LAB03_OOP_DATA_STRUCTURES_H

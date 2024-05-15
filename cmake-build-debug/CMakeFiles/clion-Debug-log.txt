@@ -1,0 +1,5 @@
+"C:\soft\CLion 2023.3.3\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/soft/CLion 2023.3.3/bin/ninja/win/x64/ninja.exe" -G Ninja -S C:\projects\c++\labs\lab03-oop -B C:\projects\c++\labs\lab03-oop\cmake-build-debug
+-- Found SFML 2.6.1 in C:/Users/38093/OneDrive/Документи/libs/SFML-2.6.1-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.1/lib/cmake/SFML
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: C:/projects/c++/labs/lab03-oop/cmake-build-debug

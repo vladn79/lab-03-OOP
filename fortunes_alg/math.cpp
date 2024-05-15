@@ -50,7 +50,7 @@ double Vector::GetNorm() const
 
 double Vector::GetDistance(const Vector& other) const
 {
-    return (*this - other).getNorm();
+    return (*this - other).GetNorm();
 }
 
 double Vector::GetDet(const Vector& other) const

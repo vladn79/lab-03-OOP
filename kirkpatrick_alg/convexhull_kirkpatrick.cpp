@@ -60,7 +60,7 @@ void ConvexHullKirkpatrick::visualizeConvexHullKirkpatrick(Point_for_kir points[
     ConvexHullKirkpatrick convex;
     std::vector<Point_for_kir> hull = convex.convexHull(points, n);
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Convex Hull (Kir)");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "Convex Hull (Kir)");
     window.setFramerateLimit(60);
 
     while (window.isOpen()) {
