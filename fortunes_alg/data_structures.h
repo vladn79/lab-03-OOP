@@ -150,3 +150,52 @@ public:
 
 bool operator<(const Event& lhs, const Event& rhs);
 std::ostream& operator<<(std::ostream& os, const Event& event);
+
+
+class Beachline
+{
+public:
+    Beachline();
+    ~Beachline();
+
+    Beachline(const Beachline&) = delete;
+    Beachline& operator=(const Beachline&) = delete;
+    Beachline(Beachline&&) = delete;
+    Beachline& operator=(Beachline&&) = delete;
+
+    Arc* createArc(VoronoiDiagram::Site* site);
+
+    bool isEmpty() const;
+    bool isNil(const Arc* x) const;
+    void setRoot(Arc* x);
+    Arc* getLeftmostArc() const;
+
+    Arc* locateArcAbove(const Vector& point, double l) const;
+    void insertBefore(Arc* x, Arc* y);
+    void insertAfter(Arc* x, Arc* y);
+    void replace(Arc* x, Arc* y);
+    void remove(Arc* z);
+
+    std::ostream& print(std::ostream& os) const;
+
+private:
+    Arc* mNil;
+    Arc* mRoot;
+
+    Arc* minimum(Arc* x) const;
+    void transplant(Arc* u, Arc* v);
+
+    void insertFixup(Arc* z);
+    void removeFixup(Arc* x);
+
+    void leftRotate(Arc* x);
+    void rightRotate(Arc* y);
+
+    double computeBreakpoint(const Vector& point1, const Vector& point2, double l) const;
+
+    void free(Arc* x);
+
+    std::ostream& printArc(std::ostream& os, const Arc* arc, std::string tabs = "") const;
+};
+
+std::ostream& operator<<(std::ostream& os, const Beachline& beachline);
