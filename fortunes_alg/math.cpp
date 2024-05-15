@@ -1,215 +1,88 @@
 #include "math.h"
+
 #include <cmath>
 
-#if defined(_WIN64) || defined(_WIN32)
-#define isnan(x) _isnan(x)
-#endif
-
-using namespace std;
-
-const double Point_Fortunes::Inf = std::numeric_limits<double>::infinity();
-
-Point_Fortunes::Point_Fortunes_XY_Compare Point_Fortunes::xy_compare = Point_Fortunes::Point_Fortunes_XY_Compare();
-
-Point_Fortunes::Point_Fortunes(double _x, double _y) : x(_x), y(_y) {
+Vector::Vector(double x, double y) : x(x), y(y)
+{
 }
 
-Point_Fortunes::Point_Fortunes(const Point_Fortunes &point) : x(point.x), y(point.y) {
+
+Vector Vector::operator-() const
+{
+    return Vector(-x, -y);
 }
 
-double dotProduct(const Point_Fortunes &p1, const Point_Fortunes &p2) {
-    return p1.x * p2.x + p1.y * p2.y;
-}
-
-double crossProduct(const Point_Fortunes &p1, const Point_Fortunes &p2) {
-    return p1.x * p2.y - p1.y * p2.x;
-}
-
-Point_Fortunes operator+(const Point_Fortunes &p1, const Point_Fortunes &p2) {
-    return Point_Fortunes(p1.x + p2.x, p1.y + p2.y);
-}
-
-Point_Fortunes operator-(const Point_Fortunes &p1, const Point_Fortunes &p2) {
-    return Point_Fortunes(p1.x - p2.x, p1.y - p2.y);
-}
-
-Point_Fortunes operator/(const Point_Fortunes &p1, const Point_Fortunes &p2) {
-    return Point_Fortunes(p1.x / p2.x, p1.y / p2.y);
-}
-
-Point_Fortunes operator*(const Point_Fortunes &p, double value) {
-    return Point_Fortunes(p.x * value, p.y * value);
-}
-
-Point_Fortunes operator*(double value, const Point_Fortunes &p) {
-    return Point_Fortunes(p.x * value, p.y * value);
-}
-
-Point_Fortunes operator/(const Point_Fortunes &p, double value) {
-    return Point_Fortunes(p.x / value, p.y / value);
-}
-
-Point_Fortunes operator-(const Point_Fortunes &p) {
-    return Point_Fortunes(-p.x, -p.y);
-}
-
-std::ostream &operator<<(std::ostream &stream, const Point_Fortunes &p) {
-    stream << "(" << p.x << "," << p.y << ")";
-    return stream;
-}
-
-std::vector<Point_Fortunes> &operator<<(std::vector<Point_Fortunes> &v, const Point_Fortunes &p) {
-    v.push_back(p);
-    return v;
-}
-
-Point_Fortunes &Point_Fortunes::operator-=(const Point_Fortunes &p) {
-    x -= p.x;
-    y -= p.y;
+Vector& Vector::operator+=(const Vector& other)
+{
+    x += other.x;
+    y += other.y;
     return *this;
 }
 
-Point_Fortunes &Point_Fortunes::operator+=(const Point_Fortunes &p) {
-    x += p.x;
-    y += p.y;
+Vector& Vector::operator-=(const Vector& other)
+{
+    x -= other.x;
+    y -= other.y;
     return *this;
 }
 
-Point_Fortunes &Point_Fortunes::operator*=(double value) {
-    x *= value;
-    y *= value;
+Vector& Vector::operator*=(double t)
+{
+    x *= t;
+    y *= t;
     return *this;
 }
 
-Point_Fortunes &Point_Fortunes::operator/=(double value) {
-    x /= value;
-    y /= value;
-    return *this;
+Vector Vector::GetOrthogonal() const
+{
+    return Vector(-y, x);
 }
 
-double Point_Fortunes::operator[](int i) {
-    if (i==0) return x;
-    else return y;
+double Vector::dot(const Vector& other) const
+{
+    return x * other.x + y * other.y;
 }
 
-void Point_Fortunes::setX(double x) {
-    this->x = x;
+double Vector::GetNorm() const
+{
+    return std::sqrt(x * x + y * y);
 }
 
-void Point_Fortunes::setY(double y) {
-    this->y = y;
+double Vector::GetDistance(const Vector& other) const
+{
+    return (*this - other).getNorm();
 }
 
-bool Point_Fortunes::isVertical() {
-    return (y == Inf && !isnan(x) && x != Inf);
+double Vector::GetDet(const Vector& other) const
+{
+    return x * other.y - y * other.x;
 }
 
-bool Point_Fortunes::isHorizontal() {
-    return (x == Inf && !isnan(y) && y != Inf);
+Vector operator+(Vector lhs, const Vector& rhs)
+{
+    lhs += rhs;
+    return lhs;
 }
 
-bool Point_Fortunes::isValid() {
-    if (x == Inf && y == Inf)
-        return false;
-    return (!isnan(x) && !isnan(y));
+Vector operator-(Vector lhs, const Vector& rhs)
+{
+    lhs -= rhs;
+    return lhs;
 }
 
-Point_Fortunes Point_Fortunes::normalized() {
-    return (*this) / this->norm();
+Vector operator*(double t, Vector vec)
+{
+    vec *= t;
+    return vec;
 }
 
-void Point_Fortunes::normalize() {
-    double n = norm();
-    x /= n;
-    y /= n;
+Vector operator*(Vector vec, double t)
+{
+    return t * vec;
 }
 
-double Point_Fortunes::norm() {
-    return sqrt(x * x + y * y);
+std::ostream& operator<<(std::ostream& os, const Vector& vec)
+{
+    os << "(" << vec.x << ", " << vec.y << ")";
+    return os;
 }
-
-double Point_Fortunes::norm2() {
-    return x *x + y * y;
-}
-
-Point_Fortunes Point_Fortunes::getRotated90CW() {
-    return Point_Fortunes(y, -x);
-}
-
-Point_Fortunes Point_Fortunes::getRotated90CCW() {
-    return Point_Fortunes(-y, x);
-}
-
-bool Point_Fortunes::isLeftTurn(const Point_Fortunes &p1, const Point_Fortunes &p2, const Point_Fortunes &p3) {
-    return (crossProduct(p2 - p1, p3 - p2) > 0.0);
-}
-
-bool Point_Fortunes::isRightTurn(const Point_Fortunes &p1, const Point_Fortunes &p2, const Point_Fortunes &p3) {
-    return (crossProduct(p2 - p1, p3 - p2) < 0.0);
-}
-
-bool equal(const Point_Fortunes &p1, const Point_Fortunes &p2, double EPSILON) {
-    return (fabs(p1.x - p2.x) < EPSILON && fabs(p1.y - p2.y) < EPSILON);
-}
-
-bool equal(double v1, double v2, double EPSILON) {
-    return fabs(v1 - v2) < EPSILON;
-}
-
-
-bool findCircleCenter(const Point_Fortunes &p1, const Point_Fortunes &p2, const Point_Fortunes &p3, Point_Fortunes &center) {
-
-    Point_Fortunes u1 = (p1 - p2).normalized(), u2 = (p3 - p2).normalized();
-
-    double cross = crossProduct(u1, u2);
-    if (fabs(cross) < CIRCLE_CENTER_EPSILON) {
-        return false;
-    }
-    Point_Fortunes pc1 = 0.5 * (p1 + p2), pc2 = 0.5 * (p2 + p3);
-
-    double b1 = dotProduct(u1, pc1), b2 = dotProduct(u2, pc2);
-    center.x = (b1 * u2.y - b2 * u1.y) / cross;
-    center.y = (u1.x * b2 - u2.x * b1) / cross;
-
-    return true;
-}
-
-int intersectionPointsNum(const Point_Fortunes &f1, const Point_Fortunes &f2, double directrix) {
-    if (fabs(f1.x - f2.x) < POINT_EPSILON && fabs(f1.y - f2.y) < POINT_EPSILON) {
-        return -1;
-    }
-    if (fabs(f1.y - f2.y) < POINT_EPSILON)
-        return 1;
-    return 2;
-}
-
-vector<Point_Fortunes> findIntersectionPoints(const Point_Fortunes &f1, const Point_Fortunes &f2, double d) {
-    vector<Point_Fortunes> result;
-    if (fabs(f1.x - f2.x) < POINT_EPSILON) {
-        double y = 0.5 * (f1.y + f2.y), D = sqrt(d * d - d * (f1.y + f2.y) + f1.y * f2.y);
-        result.push_back(Point_Fortunes(f1.x - D, y));
-        result.push_back(Point_Fortunes(f1.x + D, y));
-    } else if (fabs(f1.y - f2.y) < POINT_EPSILON) {
-        double x = 0.5 * (f1.x + f2.x);
-        result.push_back(Point_Fortunes(x, 0.5 * ((x - f1.x) * (x - f1.x) + f1.y * f1.y  - d * d) / (f1.y - d)));
-    } else {
-
-        double D = 2. * sqrt(pow(f1.x - f2.x, 2) * (d - f1.y) * (d - f2.y) * (pow(f1.x - f2.x, 2) + pow(f1.y - f2.y, 2)));
-        double T = -2. * d * pow(f1.x - f2.x, 2) + (f1.y + f2.y) * (pow(f2.x - f1.x, 2) + pow(f2.y - f1.y, 2));
-        double Q = 2. * pow(f1.y - f2.y, 2);
-
-        double y1 = (T - D) / Q, y2 = (T + D) / Q;
-        double x1 = 0.5 * (f1.x * f1.x - f2.x * f2.x + (2 * y1 - f2.y - f1.y) * (f2.y - f1.y)) / (f1.x - f2.x);
-        double x2 = 0.5 * (f1.x * f1.x - f2.x * f2.x + (2 * y2 - f2.y - f1.y) * (f2.y - f1.y)) / (f1.x - f2.x);
-
-        if (x1 > x2) {
-            std::swap(x1, x2);
-            std::swap(y1, y2);
-        }
-        result.push_back(Point_Fortunes(x1, y1));
-        result.push_back(Point_Fortunes(x2, y2));
-    }
-    return result;
-}
-
-
