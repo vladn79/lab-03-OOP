@@ -9,14 +9,19 @@ using namespace std;
 
 
 int main() {
-    const int numPoints = 10;
+    const int numPoints = 50;
 
-    Point a[] = {{53, 100}, {60, 700}, {190, 300}, {400, 100},
-                 {700, 20}, {480, 480}, {200, 200}, {90, 6}, {690, 690}};
-    int n = sizeof(a) / sizeof(a[0]);
+    Point aa[numPoints];
+    for (int i = 0; i < numPoints; ++i) {
+        int x = rand() % 800;
+        int y = rand() % 700;
+        aa[i] = Point(x, y);
+    }
+
+    int n = sizeof(aa) / sizeof(aa[0]);
 
     ConvexHull convexHull;
-   convexHull.printHull(a, n);
+   convexHull.printHull(aa, n);
 
     Point_for_graham points[numPoints];
     for (int i = 0; i < numPoints; ++i) {
@@ -28,32 +33,28 @@ int main() {
     ConvexHullGraham convexHullGraham;
     convexHullGraham.convexHull(points, numPoints);
 
-    convexHullGraham.visualizeConvexHull(points, numPoints);
+    convexHullGraham.visualizeConvexHull(points, 50);
 
-
-
-   /* Point_for_graham points[] = {{2, 8}, {1, 1}, {9, 90}, {4, 4},
-                                 {0, 0}, {1, 2}, {3, 1}, {3, 3}, {7, 12}};
-    ConvexHullGraham hull;
-    hull.convexHull(points, n);
-
-
-    cout << "---------"<<endl;
-
-    Point_for_Jarvis point[] = {{2, 8}, {1, 1}, {9, 90}, {4, 4},
-                                {0, 0}, {1, 2}, {3, 1}, {3, 3}, {7, 12}};
-    vector<Point_for_Jarvis> hull_jarvis = ConvexHullJarvis::convexHull(point, n);
-
-    for (const Point_for_Jarvis& p : hull_jarvis) {
-        cout << "(" << p.x << ", " << p.y << ")\n";
+    Point_for_Jarvis b[numPoints];
+    for (int i = 0; i < numPoints; ++i) {
+        int x = rand() % 800;
+        int y = rand() % 600;
+        b[i] = Point_for_Jarvis(x, y);
     }
+    vector<Point_for_Jarvis> hull_jarvis = ConvexHullJarvis::convexHull(b, n);
+    ConvexHullJarvis hull_algorithm;
+    hull_algorithm.visualizeConvexHullJarvis(b, numPoints);
 
-    cout << "---------"<<endl;
 
-    Point_for_kir b[] = {{2, 8}, {1, 1}, {9, 90}, {4, 4}, {0, 0}, {1, 2}, {3, 1}, {3, 3}, {7, 12}};
-
-    ConvexHullKirkpatrick convexh;
-    vector<Point_for_kir> hullkir = convexh.printHull(b, n); */
+    Point_for_kir c[numPoints];
+    for (int i = 0; i < numPoints; ++i) {
+        int x = rand() % 800;
+        int y = rand() % 600;
+        c[i] = Point_for_kir(x, y);
+    }
+    vector<Point_for_kir> h = ConvexHullKirkpatrick::convexHull(c, n);
+    ConvexHullKirkpatrick alg;
+    alg.visualizeConvexHullKirkpatrick(c, numPoints);
 
     return 0;
 }
