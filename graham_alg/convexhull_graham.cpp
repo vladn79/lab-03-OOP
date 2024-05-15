@@ -83,10 +83,12 @@ void ConvexHullGraham::visualizeConvexHull(Point_for_graham points[], int n) {
         }
     }
 
-    std::sort(points, points + n, [&](const Point_for_graham& a, const Point_for_graham& b) {
-        int orientation = this->orientation(points[lowestY], a, b);
+    std::swap(points[0], points[lowestY]);
+
+    std::sort(points + 1, points + n, [&](const Point_for_graham& a, const Point_for_graham& b) {
+        int orientation = this->orientation(points[0], a, b);
         if (orientation == 0) {
-            return this->distSq(points[lowestY], b) >= this->distSq(points[lowestY], a);
+            return this->distSq(points[0], a) < this->distSq(points[0], b);
         }
         return orientation == 2;
     });
@@ -101,24 +103,31 @@ void ConvexHullGraham::visualizeConvexHull(Point_for_graham points[], int n) {
         hullStack.push(points[i]);
     }
 
-
-    sf::RenderWindow window(sf::VideoMode(800, 800), "Convex Hull");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "Convex Hull(Graham)");
+    window.clear(sf::Color::White); // Set background color to white
 
     sf::CircleShape shape(2.f);
-    shape.setFillColor(sf::Color::Red);
+    shape.setFillColor(sf::Color::Black); // Set point color to black
     for (int i = 0; i < n; ++i) {
         shape.setPosition(points[i].x, points[i].y);
         window.draw(shape);
     }
+
     sf::VertexArray lines(sf::LinesStrip);
+    std::vector<Point_for_graham> hullPoints;
     while (!hullStack.empty()) {
-        Point_for_graham p = hullStack.top();
-        lines.append(sf::Vertex(sf::Vector2f(p.x, p.y), sf::Color::Blue));
+        hullPoints.push_back(hullStack.top());
         hullStack.pop();
     }
-    sf::Vector2f firstPointCoords = lines[0].position;
-    Point_for_graham firstPoint(firstPointCoords.x, firstPointCoords.y);
-    lines.append(sf::Vertex(sf::Vector2f(firstPoint.x, firstPoint.y), sf::Color::Blue));
+    std::reverse(hullPoints.begin(), hullPoints.end());
+
+    for (const auto& p : hullPoints) {
+        lines.append(sf::Vertex(sf::Vector2f(p.x, p.y), sf::Color::Blue)); // Set line color to black
+    }
+
+    if (!hullPoints.empty()) {
+        lines.append(sf::Vertex(sf::Vector2f(hullPoints[0].x, hullPoints[0].y), sf::Color::Black)); // Close the loop
+    }
 
     window.draw(lines);
     window.display();

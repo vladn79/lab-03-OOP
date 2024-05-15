@@ -9,7 +9,7 @@ using namespace std;
 class Point {
 
 public:
-    Point(int x, int y);
+    Point(int x = 0, int y = 0) : x(x), y(y) {}
 
     int getX() const;
     int getY() const;

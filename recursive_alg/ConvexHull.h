@@ -15,10 +15,8 @@ private:
 
 public:
     ConvexHull();
-    void drawPointsAndLines(sf::RenderWindow& window, const std::vector<Point>& points);
-
+    void drawPointsAndLines(sf::RenderWindow& window, const std::vector<Point>& points, const std::vector<Point>& hull);
     void printHull(Point a[], int n);
 };
-
 
 #endif //LAB03_OOP_CONVEXHULL_H
